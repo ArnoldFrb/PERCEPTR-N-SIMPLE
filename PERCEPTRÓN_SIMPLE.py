@@ -18,9 +18,10 @@ ER = 0.1
 NI = 1000
 
 #APRENDIZAJE
-for SALIDAS
+for SALIDAS in np.nditer(X, order='F'):
+    print(SALIDAS, end=' ')
 
 
-print("X = ", X)
-print("")
-print("Y = ", YD)
+#print("X = ", X)
+#print("")
+#print("Y = ", YD)
