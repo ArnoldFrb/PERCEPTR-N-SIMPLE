@@ -27,13 +27,27 @@ while True:
     print()
 
     #OBTENER PATRON DE ENTRASDAS
-    for I in range(P):
-        XP = []
-        for J in range(M):
-            XP.append(X[I][J])
+    for IP in range(P):
+        XP = []     #PATRON PRESENTADO
+        for JP in range(M):
+            XP.append(X[IP][JP])
         print(XP)
 
-    IT = IT + 1
+        print()
+        print("FUNCION SOMA")
+        SL = []
+        for IS in range(N):
+            SLD = 0
+            for JS in range(M):
+                SLD = SLD + (XP[JS] * PESOS[IS][JS])
+            SL.append(SLD - UMBRAL[IS])
+        print(SL)
+
+        print()
+        print()
+        print("---------------------------")
+
+    IT+=1
     if(IT != 0):
         break
 
