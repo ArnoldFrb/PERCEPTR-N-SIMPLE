@@ -32,8 +32,9 @@ while True:
         for JP in range(M):
             XP.append(X[IP][JP])
         print(XP)
-
         print()
+
+        #METODO PARA OBTENER LA FUNCION SOMA
         print("FUNCION SOMA")
         SL = []
         for IS in range(N):
