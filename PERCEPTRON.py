@@ -21,6 +21,7 @@ IT = 0      #ITERACION INICIAL
 print()
 print("---ENTRENAMIENTO---")
 print()
+
 #CICLO PARA ITERACIONES
 while True:
 
@@ -104,6 +105,7 @@ while True:
     print("ERROR DE LOS PATRONES")
     print(EP)
     print()
+
     #METODO PARA OBTENER EL ERROR DE LA ITERACION
     print("ERROR DE LA ITERACION")
     ERMS = (np.sum(EP)) / P
