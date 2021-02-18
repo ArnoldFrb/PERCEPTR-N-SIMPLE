@@ -1,23 +1,33 @@
 import numpy as np
 
 class Neurona:
-    X = np.array([[1,0,1], [0,1,1], [1,1,0]])               #MATRIZ ENTRADAS
+    MATRIZ_ENTRADA = np.array([[1,0,1], [0,1,1], [1,1,0]])
+    MATRIZ_SALIDA = np.array([[1,0], [0,1], [1,1]])
+    MATRIZ_PESOS = np.array([[0.1,-0.5,-0.9], [0.6,0.2,-0.3]])
+    MATRIZ_UMBRALES = np.array([0.5, -0.8])
 
-    YD = np.array([[1,0], [0,1], [1,1]])                    #MATRIZ SALIDAS
+    ENTRADA = 3
+    SALIDAS = 2
+    PATRONES = 3
 
-    PESOS = np.array([[0.1,-0.5,-0.9], [0.6,0.2,-0.3]])     #MATRIZ PESOS
+    RATA_APRENDIZAJE = 1
+    ERROR_ITERACION = 0.1
+    NUMERO_ITERACIONES = 1000
 
-    UMBRALES = np.array([0.5, -0.8])                        #MATRIZ UMBRAL
+    ITERACION_INICIAL = 0
 
-    M = 3       #ENTREDAS
-    N = 2       #SALIDAS
-    P = 3       #PATRONES
-
-    RA = 1      #RATA DE APRENDIZAJE
-    ER = 0.1    #ERROR LINEAL
-    NI = 1000   #NUMERO DE ITERACIONES
-
-    IT = 0      #ITERACION INICIAL
-
+    #METODO PARA ENTRENAR LA NEURONA
     def ENTRENAR():
-        
+
+        #CICLO PARA ITERACIONES
+        while True:
+
+            ERROR_PATRON = []
+
+
+
+            ITERACION_INICIAL+=1
+
+            #CONDICIONES DE PARADAS
+            if((ITERACION_INICIAL > NUMERO_ITERACIONES-1) or (ERMS <= ERROR_ITERACION)):
+                break
