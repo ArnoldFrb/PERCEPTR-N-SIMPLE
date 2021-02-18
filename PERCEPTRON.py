@@ -33,7 +33,7 @@ while True:
     #OBTENER PATRON DE ENTRASDAS
     for IP in range(P):
         XP = []         #PATRON PRESENTADO
-        print("PATRON: ", IP)
+        print("PATRON: ", IP+1)
         print()
         for JP in range(M):
             XP.append(X[IP][JP])
@@ -97,7 +97,6 @@ while True:
         for IU in range(N):
             UMBRAL[IU] = UMBRAL[IU] + (RA * EL[IU] * 1)       
         print(UMBRAL)
-
         print()
         print("---------------------------")
         
