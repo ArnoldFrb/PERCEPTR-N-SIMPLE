@@ -24,6 +24,8 @@ print()
 #CICLO PARA ITERACIONES
 while True:
 
+    EP = []             #ERROR PATRON
+
     print("---------------------------")
     print("ITERACION: ", IT)
     print("---------------------------")
@@ -31,10 +33,19 @@ while True:
     #OBTENER PATRON DE ENTRASDAS
     for IP in range(P):
         XP = []         #PATRON PRESENTADO
+        print("PATRON: ", IP)
+        print()
         for JP in range(M):
             XP.append(X[IP][JP])
         print("PATRON PRESENTADO")
         print(XP)
+        print()
+
+        YDP = []         #PATRON PRESENTADO
+        for JP in range(N):
+            YDP.append(YD[IP][JP])
+        print("SALIDA DEL PATRON")
+        print(YDP)
         print()
 
         #METODO PARA OBTENER LA FUNCION SOMA
@@ -50,13 +61,27 @@ while True:
 
         #METODO PARA OBTENER LA FUNCION ESCALON
         print("FUNCION ESCALON")
-        YR = []         #SALIDA DE LA FUNCION SOMA
-        for IE in range(N):
-            if SL[IE] >= 0:
+        YR = []         #SALIDA DE LA FUNCION ESCALON
+        for IEC in range(N):
+            if SL[IEC] >= 0:
                 YR.append(1)
             else:
                 YR.append(0)
         print(YR)
+        print()
+
+        #METODO PARA OBTENER EL ERROR LINEAL
+        print("ERROR LINEAL")
+        EL = []          #ERROR LINEAL
+        for IEL in range(N):
+            EL.append(YDP[IEL] - YR[IEL])
+        print(EL)
+        print()
+        
+        #METODO PARA OBTENER EL ERROR DEL PATRON
+        print("ERROR PATRON")
+        EP.append((np.abs(EL).sum()) / N)
+        print(EP)
 
         print()
         print()
