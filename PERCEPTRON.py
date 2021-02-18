@@ -19,17 +19,18 @@ NI = 1000   #NUMERO DE ITERACIONES
 IT = 0      #ITERACION INICIAL
 
 print()
-
+print("---ENTRENAMIENTO---")
+print()
 #CICLO PARA ITERACIONES
 while True:
 
-    print("---ENTRENAMIENTO---")
-    print()
     print("---------------------------")
-    
+    print("ITERACION: ", IT)
+    print("---------------------------")
+
     #OBTENER PATRON DE ENTRASDAS
     for IP in range(P):
-        XP = []     #PATRON PRESENTADO
+        XP = []         #PATRON PRESENTADO
         for JP in range(M):
             XP.append(X[IP][JP])
         print("PATRON PRESENTADO")
@@ -45,6 +46,17 @@ while True:
                 SLD = SLD + (XP[JS] * PESOS[IS][JS])
             SL.append(SLD - UMBRAL[IS])
         print(SL)
+        print()
+
+        #METODO PARA OBTENER LA FUNCION ESCALON
+        print("FUNCION ESCALON")
+        YR = []         #SALIDA DE LA FUNCION SOMA
+        for IE in range(N):
+            if SL[IE] >= 0:
+                YR.append(1)
+            else:
+                YR.append(0)
+        print(YR)
 
         print()
         print()
