@@ -6,7 +6,7 @@ YD = np.array([[1,0], [0,1], [1,1]])                    #MATRIZ SALIDAS
 
 PESOS = np.array([[0.1,-0.5,-0.9], [0.6,0.2,-0.3]])     #MATRIZ PESOS
 
-UMBRAL = np.array([[0.5], [-0.8]])                      ##MATRIZ UMBRAL
+UMBRAL = np.array([0.5, -0.8])                          #MATRIZ UMBRAL
 
 M = 3       #ENTREDAS
 N = 2       #SALIDAS
@@ -25,20 +25,22 @@ while True:
 
     print("---ENTRENAMIENTO---")
     print()
-
+    print("---------------------------")
+    
     #OBTENER PATRON DE ENTRASDAS
     for IP in range(P):
         XP = []     #PATRON PRESENTADO
         for JP in range(M):
             XP.append(X[IP][JP])
+        print("PATRON PRESENTADO")
         print(XP)
         print()
 
         #METODO PARA OBTENER LA FUNCION SOMA
         print("FUNCION SOMA")
-        SL = []
+        SL = []         #SALIDA DE LA FUNCION SOMA
         for IS in range(N):
-            SLD = 0
+            SLD = 0     #SUMATORIA DE LA FUNCION SOMA
             for JS in range(M):
                 SLD = SLD + (XP[JS] * PESOS[IS][JS])
             SL.append(SLD - UMBRAL[IS])
