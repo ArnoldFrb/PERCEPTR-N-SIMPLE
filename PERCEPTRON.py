@@ -27,7 +27,7 @@ while True:
     EP = []             #ERROR PATRON
 
     print("---------------------------")
-    print("ITERACION: ", IT)
+    print("ITERACION: ", IT+1)
     print("---------------------------")
 
     #OBTENER PATRON DE ENTRASDAS
@@ -81,16 +81,39 @@ while True:
         #METODO PARA OBTENER EL ERROR DEL PATRON
         print("ERROR PATRON")
         EP.append((np.abs(EL).sum()) / N)
-        print(EP)
-
+        print((np.abs(EL).sum()) / N)
         print()
+
+        #METODO PARA ACTUALIZAR PESOS
+        print("PESOS ACTUALIZADOS")
+        for IPS in range(N):
+            for JPS in range(M):
+                PESOS[IPS][JPS] = PESOS[IPS][JPS] + (RA * EL[IPS] * XP[JPS])
+        print(PESOS)
+        print()
+
+        #METODO PARA ACTUALIZAR UMBRALES
+        print("UMBRALES ACTUALIZADOS")
+        for IU in range(N):
+            UMBRAL[IU] = UMBRAL[IU] + (RA * EL[IU] * 1)       
+        print(UMBRAL)
+
         print()
         print("---------------------------")
+        
+    print("---------------------------")
+    print("ERROR DE LOS PATRONES")
+    print(EP)
+    print()
+    #METODO PARA OBTENER EL ERROR DE LA ITERACION
+    print("ERROR DE LA ITERACION")
+    ERMS = (np.sum(EP)) / P
+    print(ERMS)
+    print()
 
     IT+=1
-    if(IT != 0):
+    if((IT > NI-1) or (ERMS <= ER)):
         break
 
-print()
-print("NUMERO DE ITERACIONES REALIZADAS", IT)
+print("NUMERO DE ITERACIONES REALIZADAS: ", IT)
 print()
