@@ -60,7 +60,7 @@ class Neurona:
                 print("ERRORES PATRONES")
                 print((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / len(self.MATRIZ_SALIDA[0]))
                 print()
-                
+
                 ERROR_PATRON.append((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / len(self.MATRIZ_SALIDA[0]))
 
                 print("NUEVOS PESOS")
@@ -123,12 +123,12 @@ class Neurona:
     def ACTUALIZAR_PESOS(self, PATRON_PRESENTADO, ERROR_LINEAL):
         for N in range(len(self.MATRIZ_PESOS)):
             for M in range(len(self.MATRIZ_PESOS[0])):
-                self.MATRIZ_PESOS[N][M] = self.MATRIZ_PESOS[N][M] + (self.RATA_APRENDIZAJE * ERROR_LINEAL[N] * PATRON_PRESENTADO[M])
+                self.MATRIZ_PESOS[N][M] += (self.RATA_APRENDIZAJE * ERROR_LINEAL[N] * PATRON_PRESENTADO[M])
 
     #METODO PARA ACTUALIZAR UMBRALES
     def ACTUALIZAR_UMBRALES(self, ERROR_LINEAL):
         for N in range(len(self.MATRIZ_UMBRALES)):
-            self.MATRIZ_UMBRALES[N] = self.MATRIZ_UMBRALES[N] + (self.RATA_APRENDIZAJE * ERROR_LINEAL[N] * 1)
+            self.MATRIZ_UMBRALES[N] += (self.RATA_APRENDIZAJE * ERROR_LINEAL[N] * 1)
 
 PRUEBA_MATRIZ_ENTRADA = [[1,0,1], [0,1,1], [1,1,0]]
 PRUEBA_MATRIZ_SALIDA = [[1,0], [0,1], [1,1]]
