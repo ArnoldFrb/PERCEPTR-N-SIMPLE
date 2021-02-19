@@ -2,44 +2,46 @@ import numpy as np
 
 class Neurona:
 
-    MATRIZ_ENTRADA = np.array([[1,0,1], [0,1,1], [1,1,0], [0,1,0]])
-    MATRIZ_SALIDA = np.array([[1,0], [0,1], [1,1], [0,0]])
-    MATRIZ_PESOS = np.array([[0.1,-0.5,-0.9], [0.6,0.2,-0.3]])
-    MATRIZ_UMBRALES = np.array([0.5, -0.8])
-
-    RATA_APRENDIZAJE = 1
-    ERROR_ITERACION = 0.1
-    NUMERO_ITERACIONES = 1
-
-    ITERACION_INICIAL = 0
+    def __init__(self, RATA_APRENDIZAJE, ERROR_ITERACION, NUMERO_ITERACIONES):
+        #MATRICES
+        self.MATRIZ_ENTRADA = np.array([[1,0,1], [0,1,1], [1,1,0], [0,1,0]])
+        self.MATRIZ_SALIDA = np.array([[1,0], [0,1], [1,1], [0,0]])
+        self.MATRIZ_PESOS = np.array([[0.1,-0.5,-0.9], [0.6,0.2,-0.3]])
+        self.MATRIZ_UMBRALES = np.array([0.5, -0.8])
+        #VARIABLES DE CONFIGURACION
+        self.RATA_APRENDIZAJE = RATA_APRENDIZAJE
+        self.ERROR_ITERACION = ERROR_ITERACION
+        self.NUMERO_ITERACIONES = NUMERO_ITERACIONES
 
     #METODO PARA ENTRENAR LA NEURONA
-    def ENTRENAR():
+    def ENTRENAR(self):
 
         print()
         print("---ENTRENAMIENTO---")
         print()
 
         #CICLO PARA ITERACIONES
+        ITERACION_INICIAL = 0
         while True:
 
             print("---------------------------")
-            print("ITERACION: ", Neurona.ITERACION_INICIAL+1)
+            print("ITERACION: ", ITERACION_INICIAL+1)
             print("---------------------------")
 
             ERROR_PATRON = []
 
             #CICLO ENCARGADO DE RECORRER LOS PATRONES
-            for I in range(len(Neurona.MATRIZ_ENTRADA)):
+            for I in range(len(self.MATRIZ_ENTRADA)):
                 
-                PATRON_PRESENTADO = (Neurona.MATRIZ_ENTRADA[I,:])
+                PATRON_PRESENTADO = (self.MATRIZ_ENTRADA[I,:])
                 print(PATRON_PRESENTADO)
 
 
-            Neurona.ITERACION_INICIAL+=1
+            ITERACION_INICIAL+=1
 
             #CONDICIONES DE PARADA
-            if(Neurona.ITERACION_INICIAL > 0):
+            if(ITERACION_INICIAL > 0):
                 break
 
-Neurona.ENTRENAR()
+red = Neurona(1, 0.1, 0)
+red.ENTRENAR()
