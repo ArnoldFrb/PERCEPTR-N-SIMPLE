@@ -7,8 +7,8 @@ UMBRAL = np.array([0.5, -0.8])
 
 ERROR_LINEAL = []
 
-RA = 1      #RATA DE APRENDIZAJE
-ER = 0.1    #ERROR LINEAL
+RATA = 1      #RATA DE APRENDIZAJE
+ERROR = 0.1    #ERROR LINEAL
 NUMERO_ITERACIONES = 1000   #NUMERO DE ITERACIONES
 
 ITERATE = 0  #ITERACION INICIAL
@@ -53,10 +53,10 @@ while True:
 
         for j in range(len(PESOS)) :
             for i in range(len(PESOS[0])) :
-                PESOS[j][i] += RA * ERROR_LINEAL[j] * ENTRADA[i]
+                PESOS[j][i] += RATA * ERROR_LINEAL[j] * ENTRADA[i]
 
         for j in range(len(UMBRAL)) :
-            UMBRAL[j] += RA*ERROR_LINEAL[j]
+            UMBRAL[j] += RATA*ERROR_LINEAL[j]
 
         print("PESOS",PESOS,"\n")
         print("UMBRAL",UMBRAL,"\n")
@@ -69,5 +69,5 @@ while True:
     print("ERROR DE LOS PATRONES",ERROR_PATRON,"\n")
     print("ERROR DE LA ITERACION",ERROR_RMS,"\n")
 
-    if ((ITERATE > NUMERO_ITERACIONES-1) or (ERROR_RMS <= ER)) :
+    if ((ITERATE > NUMERO_ITERACIONES-1) or (ERROR_RMS <= ERROR)) :
         break
