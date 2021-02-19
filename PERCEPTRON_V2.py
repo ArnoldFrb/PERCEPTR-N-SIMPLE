@@ -30,12 +30,14 @@ class Neurona:
 
             ERROR_PATRON = []
 
-            #CICLO ENCARGADO DE RECORRER LOS PATRONES
+            #CICLO ENCARGADO DE PRESENTAR LOS PATRONES
             for I in range(len(self.MATRIZ_ENTRADA)):
                 
-                PATRON_PRESENTADO = (self.MATRIZ_ENTRADA[I,:])
-                print(PATRON_PRESENTADO)
-
+                PATRON_ENTRADA_PRESENTADO = (self.MATRIZ_ENTRADA[I,:])
+                print(PATRON_ENTRADA_PRESENTADO)
+                PATRON_SALIDA_PRESENTADO = (self.MATRIZ_SALIDA[I,:])
+                print(PATRON_SALIDA_PRESENTADO)
+                print()
 
             ITERACION_INICIAL+=1
 
