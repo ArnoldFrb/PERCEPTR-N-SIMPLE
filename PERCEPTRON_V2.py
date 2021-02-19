@@ -31,9 +31,8 @@ class Neurona:
 
             #CICLO ENCARGADO DE RECORRER LOS PATRONES
             for I in range(len(Neurona.MATRIZ_ENTRADA)):
-                PATRON_PRESENTADO = []
-
-                PATRON_PRESENTADO.append(Neurona.MATRIZ_ENTRADA[I,:])
+                
+                PATRON_PRESENTADO = (Neurona.MATRIZ_ENTRADA[I,:])
                 print(PATRON_PRESENTADO)
 
 
