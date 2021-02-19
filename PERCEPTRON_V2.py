@@ -33,10 +33,13 @@ class Neurona:
             #CICLO ENCARGADO DE PRESENTAR LOS PATRONES
             for I in range(len(self.MATRIZ_ENTRADA)):
                 
-                PATRON_ENTRADA_PRESENTADO = (self.MATRIZ_ENTRADA[I,:])
-                print(PATRON_ENTRADA_PRESENTADO)
-                PATRON_SALIDA_PRESENTADO = (self.MATRIZ_SALIDA[I,:])
-                print(PATRON_SALIDA_PRESENTADO)
+                PATRON_PRESENTADO = (self.MATRIZ_ENTRADA[I,:])
+                print("PATRON PRESENTADO")
+                print(PATRON_PRESENTADO)
+
+                SALIDA_PATRON = (self.MATRIZ_SALIDA[I,:])
+                print("SALIDA DEL PATRON")
+                print(SALIDA_PATRON)
                 print()
 
             ITERACION_INICIAL+=1
