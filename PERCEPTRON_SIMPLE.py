@@ -1,29 +1,44 @@
+
 import numpy as np
 
-X = np.array([[1,0,1], [0,1,1], [1,1,0]])
-YD = np.array([[1,0], [0,1], [1,1]])
-PESOS = np.array([[0.1,-0.5,-0.9], [0.6,0.2,-0.3]])
+X = np.array([
+[1,0,1],
+[0,1,1],
+[1,1,0]
+])
+
+YD = np.array([
+[1,0],
+[0,1],
+[1,1]
+])
+
+PESOS = np.array([
+[0.1,-0.5,-0.9],
+[0.6, 0.2,-0.3]
+])
+
 UMBRAL = np.array([0.5, -0.8])
 
 ERROR_LINEAL = []
 
-RATA = 1      #RATA DE APRENDIZAJE
-ERROR = 0.1    #ERROR LINEAL
+RATA = 1        #RATA DE APRENDIZAJE
+ERROR = 0.1     #ERROR LINEAL
 NUMERO_ITERACIONES = 1000   #NUMERO DE ITERACIONES
 
-ITERATE = 0  #ITERACION INICIAL
+ITERATE = 0     #ITERACION INICIAL
 while True:
 
     ERROR_PATRON = []   #ERROR PATRON
     CONTADOR = 0
 
     print("---------------------------")
-    print("ITERACION: ",ITERATE+1)
+    print("ITERACION: ",ITERATE + 1)
     print("---------------------------")
     
     #CICLO PARA ITERACIONES
     for ENTRADA in X:
-        print("PATRON: ",CONTADOR+1,"\n")
+        print("PATRON: ",CONTADOR + 1,"\n")
         IT = 0
         YR = []
         for PESO in PESOS :
@@ -69,5 +84,5 @@ while True:
     print("ERROR DE LOS PATRONES",ERROR_PATRON,"\n")
     print("ERROR DE LA ITERACION",ERROR_RMS,"\n")
 
-    if ((ITERATE > NUMERO_ITERACIONES-1) or (ERROR_RMS <= ERROR)) :
+    if ((ITERATE > NUMERO_ITERACIONES- 1) or (ERROR_RMS <= ERROR)) :
         break

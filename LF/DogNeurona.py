@@ -9,7 +9,7 @@ class Neurona:
         UMBRAL = np.array([0.5, -0.8]),
         RATA = 1,
         ERROR = 0.1,
-        NUMERO_ITERACIONES = 0
+        NUMERO_ITERACIONES = 3
         ):
         self.X = X
         self.YD = YD
@@ -95,9 +95,14 @@ class Neurona:
             print("---------------------------")
             print("ERROR DE LOS PATRONES",ERROR_PATRON,"\n")
             print("ERROR DE LA ITERACION",ERROR_RMS,"\n")
+            
 
             if ((ITERATE > self.NUMERO_ITERACIONES - 1) or (ERROR_RMS <= self.ERROR)) :
                 break
+        print("---------------------------")
+        print("ITERACION: ",ITERATE)
+        print("---------------------------")
 
 red = Neurona()
 red.ENTRENAR()
+
