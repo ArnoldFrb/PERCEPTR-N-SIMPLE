@@ -130,14 +130,5 @@ class Neurona:
         for N in range(len(self.MATRIZ_UMBRALES)):
             self.MATRIZ_UMBRALES[N] += (self.RATA_APRENDIZAJE * ERROR_LINEAL[N] * 1)
 
-PRUEBA_MATRIZ_ENTRADA = [[1,0,1], [0,1,1], [1,1,0]]
-PRUEBA_MATRIZ_SALIDA = [[1,0], [0,1], [1,1]]
-PRUEBA_MATRIZ_PESOS = [[0.1,-0.5,-0.9], [0.6,0.2,-0.3]]
-PRUEBA_MATRIZ_UMBRALES = [0.5, -0.8]
-
-red = Neurona(
-    PRUEBA_MATRIZ_ENTRADA, PRUEBA_MATRIZ_SALIDA, 
-    PRUEBA_MATRIZ_PESOS, PRUEBA_MATRIZ_UMBRALES,
-    1, 0.01, 1000
-    )
+red = Neurona()
 red.ENTRENAR()
