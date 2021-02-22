@@ -129,6 +129,3 @@ class Neurona:
     def ACTUALIZAR_UMBRALES(self, ERROR_LINEAL):
         for N in range(len(self.MATRIZ_UMBRALES)):
             self.MATRIZ_UMBRALES[N] += (self.RATA_APRENDIZAJE * ERROR_LINEAL[N] * 1)
-
-red = Neurona()
-red.ENTRENAR()

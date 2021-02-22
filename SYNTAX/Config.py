@@ -37,5 +37,5 @@ class Config:
 
 
 
-cf = Config()
+cf = Config('ENTRADAS.TXT', 'SALIDAS.TXT')
 cf.MAIN()
