@@ -13,7 +13,7 @@ class Config:
     #METODO PARA GENERAR PESOS
     def GENERAR_PESOS(self):
         MATRIZ = []
-        for N in range(len(self.MATRIZ_SALIDA[0])):
+        for N in range(self.MATRIZ_SALIDA.ndim):
             FILA = []
             for M in range(len(self.MATRIZ_ENTRADA[0])):
                 FILA.append(round(rn.uniform(-1, 1), 2))
@@ -23,7 +23,7 @@ class Config:
     #METODO PARA GENERAR UMBRALES
     def GENERAR_UMBRALES(self):
         FILA = []
-        for N in range(len(self.MATRIZ_SALIDA[0])):
+        for N in range(self.MATRIZ_SALIDA.ndim):
             FILA.append(round(rn.uniform(-1, 1), 2))
         return FILA
 
@@ -35,5 +35,6 @@ class Config:
             )
         neuro.ENTRENAR()
 
-cf = Config('ENTRADAS.TXT', 'SALIDAS.TXT')
-cf.MAIN(1, 0.1, 10)
+if __name__ == '__main__':
+    cf = Config('ENTRADAS.TXT', 'SALIDAS.TXT')
+    cf.MAIN(1, 0.1, 1000)

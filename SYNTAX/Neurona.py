@@ -3,7 +3,7 @@ import numpy as np
 class Neurona:
 
     #CONSTRUCTOR
-    def __init__(self, MATRIZ_ENTRADA = [[1,0,1], [0,1,1], [1,1,0]], MATRIZ_SALIDA = [[1,0], [0,1], [1,1]], MATRIZ_PESOS = [[0.1,-0.5,-0.9], [0.6,0.2,-0.3]], MATRIZ_UMBRALES = [0.5, -0.8], RATA_APRENDIZAJE = 1, ERROR_ITERACION = 0.1, NUMERO_ITERACIONES = 0):
+    def __init__(self, MATRIZ_ENTRADA = [[1,0,1], [0,1,1], [1,1,0]], MATRIZ_SALIDA = [[1,0], [0,1], [1,1]], MATRIZ_PESOS = [[0.1,-0.5,-0.9], [0.6,0.2,-0.3]], MATRIZ_UMBRALES = [0.5, -0.8], RATA_APRENDIZAJE = 1, ERROR_MAXIMO = 0.1, NUMERO_ITERACIONES = 0):
         #MATRICES
         self.MATRIZ_ENTRADA = MATRIZ_ENTRADA
         self.MATRIZ_SALIDA = MATRIZ_SALIDA
@@ -11,11 +11,35 @@ class Neurona:
         self.MATRIZ_UMBRALES = MATRIZ_UMBRALES
         #VARIABLES DE CONFIGURACION
         self.RATA_APRENDIZAJE = RATA_APRENDIZAJE
-        self.ERROR_ITERACION = ERROR_ITERACION
+        self.ERROR_MAXIMO = ERROR_MAXIMO
         self.NUMERO_ITERACIONES = NUMERO_ITERACIONES
 
     #METODO PARA ENTRENAR LA NEURONA
     def ENTRENAR(self):
+
+        print("---------------------------")
+        print("---------------------------")
+
+        print()
+        print("---CONFIGURACION---")
+        print()
+
+        print("ENTRADAS: ", len(self.MATRIZ_ENTRADA[0]))
+        print("SALIDAS: ", self.MATRIZ_SALIDA.ndim)
+        print("PATRONES: ", len(self.MATRIZ_ENTRADA))
+        print()
+        print("RATA DE APRENDIZAJE: ", self.RATA_APRENDIZAJE)
+        print("ERROR MAXIMO PERMITIDO: ", self.ERROR_MAXIMO)
+        print("NUMERO ITERACIONES: ", self.NUMERO_ITERACIONES)
+        print()
+        print("PESOS INICIALES: ")
+        print(self.MATRIZ_PESOS)
+        print()
+        print("UMBRALES INICIALES: ")
+        print(self.MATRIZ_UMBRALES)
+
+        print("---------------------------")
+        print("---------------------------")
 
         print()
         print("---ENTRENAMIENTO---")
@@ -40,7 +64,7 @@ class Neurona:
                 print("PATRON PRESENTADO")
                 print(PATRON_PRESENTADO)
 
-                SALIDA_PATRON = (self.MATRIZ_SALIDA[I,:])
+                SALIDA_PATRON = np.array([self.MATRIZ_SALIDA[I]]) if self.MATRIZ_SALIDA.ndim==1 else (self.MATRIZ_SALIDA[I,:])
                 print("SALIDA DEL PATRON")
                 print(SALIDA_PATRON)
                 print()
@@ -58,10 +82,10 @@ class Neurona:
                 print()
 
                 print("ERRORES PATRONES")
-                print((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / len(self.MATRIZ_SALIDA[0]))
+                print((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / self.MATRIZ_SALIDA.ndim)
                 print()
 
-                ERROR_PATRON.append((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / len(self.MATRIZ_SALIDA[0]))
+                ERROR_PATRON.append((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / self.MATRIZ_SALIDA.ndim)
 
                 print("NUEVOS PESOS")
                 self.ACTUALIZAR_PESOS(PATRON_PRESENTADO, self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO))))
@@ -89,7 +113,7 @@ class Neurona:
             ITERACION_INICIAL+=1
 
             #CONDICIONES DE PARADA
-            if((ITERACION_INICIAL > self.NUMERO_ITERACIONES-1) or (ERROR_RMS <= self.ERROR_ITERACION)):
+            if((ITERACION_INICIAL > self.NUMERO_ITERACIONES-1) or (ERROR_RMS <= self.ERROR_MAXIMO)):
                 break
         
         print("NUMERO DE ITERACIONES REALIZADAS: ", ITERACION_INICIAL)
