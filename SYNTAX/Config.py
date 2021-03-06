@@ -37,4 +37,4 @@ class Config:
 
 if __name__ == '__main__':
     cf = Config('ENTRADAS.TXT', 'SALIDAS.TXT')
-    cf.MAIN(1, 0.1, 1000)
+    cf.MAIN(1, 0.1, 5)

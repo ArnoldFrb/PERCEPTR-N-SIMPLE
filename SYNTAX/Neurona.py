@@ -96,9 +96,9 @@ class Neurona:
                 self.ACTUALIZAR_UMBRALES(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO))))
                 print(self.MATRIZ_UMBRALES)
                 print()
-                print("--------------------")
+                print("---------------------------")
 
-            print("--------------------")
+            print("---------------------------")
             #METODO PARA OBTENER EL ERROR DEL PATRON
             print("ERRORES PATRONES")
             print(ERROR_PATRON)
