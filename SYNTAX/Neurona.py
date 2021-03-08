@@ -15,7 +15,7 @@ class Neurona:
         self.NUMERO_ITERACIONES = NUMERO_ITERACIONES
 
     #METODO PARA ENTRENAR LA NEURONA
-    def ENTRENAR(self):
+    def ENTRENAR(self, ARC_PESOS, ARC_UMBRALES):
 
         print("---------------------------")
         print("---------------------------")
@@ -118,6 +118,10 @@ class Neurona:
         
         print("NUMERO DE ITERACIONES REALIZADAS: ", ITERACION_INICIAL)
         print()
+
+        if(ERROR_RMS <= self.ERROR_MAXIMO):
+            np.savetxt("CONFIG/" + ARC_PESOS, self.MATRIZ_PESOS)
+            np.savetxt("CONFIG/" + ARC_UMBRALES, self.MATRIZ_UMBRALES)
 
     #METODO PARA OBTENER LA FUNCION SOMA
     def FUNCION_SOMA(self, PATRON):

@@ -28,13 +28,13 @@ class Config:
         return FILA
 
     #EJECUTAR NEURONA
-    def MAIN(self, RATA_APRENDIZAJE, ERROR_ITERACION, NUMERO_ITERACIONES):
+    def MAIN(self, RATA_APRENDIZAJE, ERROR_ITERACION, NUMERO_ITERACIONES, ARC_PESOS, ARC_UMBRALES):
         neuro = Neurona(
             self.MATRIZ_ENTRADA, self.MATRIZ_SALIDA, self.GENERAR_PESOS(), self.GENERAR_UMBRALES(),
             RATA_APRENDIZAJE, ERROR_ITERACION, NUMERO_ITERACIONES
             )
-        neuro.ENTRENAR()
+        neuro.ENTRENAR(ARC_PESOS, ARC_UMBRALES)
 
 if __name__ == '__main__':
     cf = Config('ENTRADAS.TXT', 'SALIDAS.TXT')
-    cf.MAIN(1, 0.1, 5)
+    cf.MAIN(1, 0.1, 5, 'PESOS.TXT', 'UMBRALES.TXT')
