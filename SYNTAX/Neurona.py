@@ -1,9 +1,12 @@
 import numpy as np
+import os
+import errno
+import math
 
 class Neurona:
 
     #CONSTRUCTOR
-    def __init__(self, MATRIZ_ENTRADA = [[1,0,1], [0,1,1], [1,1,0]], MATRIZ_SALIDA = [[1,0], [0,1], [1,1]], MATRIZ_PESOS = [[0.1,-0.5,-0.9], [0.6,0.2,-0.3]], MATRIZ_UMBRALES = [0.5, -0.8], RATA_APRENDIZAJE = 1, ERROR_MAXIMO = 0.1, NUMERO_ITERACIONES = 0):
+    def __init__(self, MATRIZ_ENTRADA = [[1,0,1], [0,1,1], [1,1,0]], MATRIZ_SALIDA = [[1,0], [0,1], [1,1]], MATRIZ_PESOS = [[0.1,-0.5,-0.9], [0.6,0.2,-0.3]], MATRIZ_UMBRALES = [0.5, -0.8], RATA_APRENDIZAJE = 1, ERROR_MAXIMO = 0.1, NUMERO_ITERACIONES = 0, FUNCION_SALIDA = 1):
         #MATRICES
         self.MATRIZ_ENTRADA = MATRIZ_ENTRADA
         self.MATRIZ_SALIDA = MATRIZ_SALIDA
@@ -13,9 +16,10 @@ class Neurona:
         self.RATA_APRENDIZAJE = RATA_APRENDIZAJE
         self.ERROR_MAXIMO = ERROR_MAXIMO
         self.NUMERO_ITERACIONES = NUMERO_ITERACIONES
+        self.FUNCION_SALIDA = FUNCION_SALIDA
 
     #METODO PARA ENTRENAR LA NEURONA
-    def ENTRENAR(self, ARC_PESOS, ARC_UMBRALES):
+    def ENTRENAR(self, ARC_PESOS, ARC_UMBRALES, CARPETA):
 
         print("---------------------------")
         print("---------------------------")
@@ -73,27 +77,27 @@ class Neurona:
                 print(self.FUNCION_SOMA(PATRON_PRESENTADO))
                 print()
 
-                print("FUNCION ESCALON")
-                print(self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))
+                print("FUNCION SALIDA")
+                print(self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO)))
                 print()
 
                 print("ERROR LINIAL")
-                print(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO))))
+                print(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO))))
                 print()
 
                 print("ERRORES PATRONES")
-                print((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / self.MATRIZ_SALIDA.ndim)
+                print((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / self.MATRIZ_SALIDA.ndim)
                 print()
 
-                ERROR_PATRON.append((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / self.MATRIZ_SALIDA.ndim)
+                ERROR_PATRON.append((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / self.MATRIZ_SALIDA.ndim)
 
                 print("NUEVOS PESOS")
-                self.ACTUALIZAR_PESOS(PATRON_PRESENTADO, self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO))))
+                self.ACTUALIZAR_PESOS(PATRON_PRESENTADO, self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO))))
                 print(self.MATRIZ_PESOS)
                 print()
 
                 print("NUEVOS PESOS")
-                self.ACTUALIZAR_UMBRALES(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_ESCALON(self.FUNCION_SOMA(PATRON_PRESENTADO))))
+                self.ACTUALIZAR_UMBRALES(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO))))
                 print(self.MATRIZ_UMBRALES)
                 print()
                 print("---------------------------")
@@ -116,12 +120,25 @@ class Neurona:
             if((ITERACION_INICIAL > self.NUMERO_ITERACIONES-1) or (ERROR_RMS <= self.ERROR_MAXIMO)):
                 break
         
+        if(ERROR_RMS <= self.ERROR_MAXIMO):
+            try:
+                os.mkdir('CONFIG/' + CARPETA)
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
+            
+            np.savetxt("CONFIG/" + CARPETA + "/" + ARC_PESOS, self.MATRIZ_PESOS)
+            np.savetxt("CONFIG/" + CARPETA + "/" + ARC_UMBRALES, self.MATRIZ_UMBRALES)
+            
+            print("PESOS OPTIMOS: ")
+            print(self.MATRIZ_PESOS)
+            print()
+            print("UMBRALES OPTIMOS: ")
+            print(self.MATRIZ_UMBRALES)
+            print()
+        
         print("NUMERO DE ITERACIONES REALIZADAS: ", ITERACION_INICIAL)
         print()
-
-        if(ERROR_RMS <= self.ERROR_MAXIMO):
-            np.savetxt("CONFIG/" + ARC_PESOS, self.MATRIZ_PESOS)
-            np.savetxt("CONFIG/" + ARC_UMBRALES, self.MATRIZ_UMBRALES)
 
     #METODO PARA OBTENER LA FUNCION SOMA
     def FUNCION_SOMA(self, PATRON):
@@ -132,13 +149,6 @@ class Neurona:
                 SLD += (PATRON[M] * self.MATRIZ_PESOS[N][M])
             SL.append(SLD - self.MATRIZ_UMBRALES[N])
         return SL
-
-    #METODO PARA OBTENER LA FUNCION ESCALON
-    def FUNCION_ESCALON(self, SALIDA_SOMA):
-        YR = []
-        for N in range(len(SALIDA_SOMA)):
-            YR.append(1 if SALIDA_SOMA[N]>=0 else 0)
-        return YR
 
     #METODO PARA OBTENER EL ERROR LINEAL
     def FUNCION_ERROR_LINEAL(self, SALIDA_PATRON, ESCALON):
@@ -157,3 +167,30 @@ class Neurona:
     def ACTUALIZAR_UMBRALES(self, ERROR_LINEAL):
         for N in range(len(self.MATRIZ_UMBRALES)):
             self.MATRIZ_UMBRALES[N] += (self.RATA_APRENDIZAJE * ERROR_LINEAL[N] * 1)
+
+    def FUNCION_SALIDAS(self, SALIDA_SOMA):
+        switcher = {
+            1: self.FUNCION_ESCALON(SALIDA_SOMA),
+            2: self.FUNCION_LINEAL(SALIDA_SOMA),
+            3: self.FUNCION_SIGMOIDE(SALIDA_SOMA)
+        }
+        return switcher.get(self.FUNCION_SALIDA, "ERROR")
+
+    #METODO PARA OBTENER LA FUNCION ESCALON
+    def FUNCION_ESCALON(self, SALIDA_SOMA):
+        YR = []
+        for N in range(len(SALIDA_SOMA)):
+            YR.append(1 if SALIDA_SOMA[N]>=0 else 0)
+        return YR
+
+    #METODO PARA OBTENER LA FUNCION SIGMOIDE
+    def FUNCION_SIGMOIDE(self, SALIDA_SOMA):
+        YR = []
+        for N in range(len(SALIDA_SOMA)):
+            YR.append(1 / (1 + np.exp(-SALIDA_SOMA[N])))
+        return YR
+
+    #METODO PARA OBTENER LA FUNCION LINEAL
+    def FUNCION_LINEAL(self, SALIDA_SOMA):
+        YR = SALIDA_SOMA
+        return YR

@@ -58,11 +58,3 @@ if __name__ == '__main__':
     window = Tk()
     Views(window)
     window.mainloop()
-
-"""
-raiz = Tk()
-raiz.title("PERCEPTRON")
-raiz.resizable(0,0)
-raiz.geometry("1100x600")
-raiz.mainloop()
-"""
