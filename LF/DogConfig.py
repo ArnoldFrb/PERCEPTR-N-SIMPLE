@@ -28,10 +28,15 @@ class Config:
     #EJECUTAR NEURONA
     def MAIN(self, RATA_APRENDIZAJE, ERROR_ITERACION, NUMERO_ITERACIONES):
         neuro = Neurona(
-            self.MATRIZ_ENTRADA, self.MATRIZ_SALIDA, self.GENERAR_PESOS(), self.GENERAR_UMBRALES(),
-            RATA_APRENDIZAJE, ERROR_ITERACION, NUMERO_ITERACIONES
+            self.MATRIZ_ENTRADA, 
+            self.MATRIZ_SALIDA, 
+            self.GENERAR_PESOS(), 
+            self.GENERAR_UMBRALES(),
+            RATA_APRENDIZAJE, 
+            ERROR_ITERACION, 
+            NUMERO_ITERACIONES
             )
         neuro.ENTRENAR()
 
 cf = Config('ENTRADAS.TXT', 'SALIDAS.TXT')
-cf.MAIN(1, 0.1, 10)
+cf.MAIN(1, 0.1, 1000)

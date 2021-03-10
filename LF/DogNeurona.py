@@ -9,7 +9,7 @@ class Neurona:
         UMBRAL = np.array([0.5, -0.8]),
         RATA = 1,
         ERROR = 0.1,
-        NUMERO_ITERACIONES = 3
+        NUMERO_ITERACIONES = 1000
         ):
         self.X = X
         self.YD = YD
