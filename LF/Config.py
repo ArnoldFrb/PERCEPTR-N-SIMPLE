@@ -7,10 +7,10 @@ class Config:
         self.matriz_salida = np.loadtxt(archivo_salida)
 
     def GetEntradas(self):
-        return matriz_entrada
+        return self.matriz_entrada
 
     def GetSalidas(self):
-        return matriz_salida
+        return self.matriz_salida
     
     def GenerarPesos(self):
         matriz = []

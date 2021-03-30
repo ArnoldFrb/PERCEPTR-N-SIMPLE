@@ -2,9 +2,10 @@ import numpy as np
 from Config import *
 
 class Neurona:
-    def __init__(self,rata_aprendizaje = 1, error = 0.1, numero_iteraciones = 1000):
-        cfg = Config()
-
+    def __init__(self,entrada, salida, rata_aprendizaje = 1, error = 0.1, numero_iteraciones = 10000):
+        
+        cfg = Config(entrada,salida)
+        
         self.entradas = cfg.GetEntradas()
         self.salidas = cfg.GetSalidas()
         self.pesos = cfg.GenerarPesos()
@@ -48,37 +49,26 @@ class Neurona:
 
     def Entrenar(self):
 
-        error_lineal = []
-        iterador = 0
+        contador = 0
 
-        while True:
+        self.error_patron = []
 
-            error_patron = []
-            contador = 0
-            
-            for entrada in self.entradas:
+        for entrada in self.entradas:
 
-                salida_resultante = self.CalcularSalidaResultante(entrada, self.pesos, self.umbral)
+            self.salida_resultante = self.CalcularSalidaResultante(entrada, self.pesos, self.umbral)
 
-                salida = self.FuncionEscalon(salida_resultante)
+            self.salida = self.FuncionEscalon(self.salida_resultante)
 
-                error_lineal = self.CalcularErrorLineal(self.salidas, salida, contador)
+            self.error_lineal = self.CalcularErrorLineal(self.salidas, self.salida, contador)
 
-                error_patron.append(self.CalcularErrorPatron(error_lineal))
+            self.error_patron.append(self.CalcularErrorPatron(self.error_lineal))
 
-                self.NuevoPeso(entrada, self.pesos, self.rata_aprendizaje, error_lineal)
+            self.NuevoPeso(entrada, self.pesos, self.rata_aprendizaje, self.error_lineal)
 
-                self.NuevoUmbral(self.umbral, self.rata_aprendizaje, error_lineal)
+            self.NuevoUmbral(self.umbral, self.rata_aprendizaje, self.error_lineal)
 
-                error_RMS = self.CalcularErrorRMS(error_patron)
+            self.error_RMS = self.CalcularErrorRMS(self.error_patron)
 
-                contador += 1
+            contador += 1
 
-            iterador += 1            
 
-            if ((iterador > self.numero_iteraciones - 1) or (error_RMS <= self.error)) :
-                break
-        
-        if (error_RMS <= self.error):
-            np.savetxt('Data/pesos', self.pesos, delimiter =' ')
-            np.savetxt('Data/umbral', self.umbral, delimiter =' ')

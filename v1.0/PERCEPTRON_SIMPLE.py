@@ -29,6 +29,7 @@ for n in range(YD.ndim):
         fila.append(round(rn.uniform(-1, 1), 2))
     PESOS.append(fila)
 
+
 for n in range(YD.ndim):
     UMBRAL.append(round(rn.uniform(-1, 1), 2))
 
@@ -39,11 +40,11 @@ while True:
     
     #CICLO PARA ITERACIONES
     for ENTRADA in X:
-        IT = 0
+
         YR = []
         for PESO in PESOS :
             YR.append((ENTRADA @ PESO)-UMBRAL[IT])
-            IT += 1
+
 
         SALIDA = []
         print("YR",YR,"\n")
