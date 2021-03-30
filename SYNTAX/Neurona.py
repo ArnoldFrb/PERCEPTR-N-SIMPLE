@@ -2,6 +2,8 @@ import numpy as np
 import os
 import errno
 import math
+import pylab as plt
+import pandas as pd
 
 class Neurona:
 
@@ -28,7 +30,7 @@ class Neurona:
         print("---CONFIGURACION---")
         print()
 
-        print("ENTRADAS: ", len(self.MATRIZ_ENTRADA[0]))
+        '''print("ENTRADAS: ", len(self.MATRIZ_ENTRADA[0]))
         print("SALIDAS: ", self.MATRIZ_SALIDA.ndim)
         print("PATRONES: ", len(self.MATRIZ_ENTRADA))
         print()
@@ -40,7 +42,7 @@ class Neurona:
         print(self.MATRIZ_PESOS)
         print()
         print("UMBRALES INICIALES: ")
-        print(self.MATRIZ_UMBRALES)
+        print(self.MATRIZ_UMBRALES)'''
 
         print("---------------------------")
         print("---------------------------")
@@ -49,94 +51,61 @@ class Neurona:
         print("---ENTRENAMIENTO---")
         print()
 
+        plt.xlabel('ITERACION')
+        plt.ylabel('ERROR RMS')
+        plt.title('ERRORES DE LAS ITERACIONES')
+        plt.grid()
+
         #CICLO PARA ITERACIONES
         ITERACION_INICIAL = 0
         while True:
-
-            print("---------------------------")
-            print("ITERACION: ", ITERACION_INICIAL+1)
-            print("---------------------------")
 
             ERROR_PATRON = []
 
             #CICLO ENCARGADO DE PRESENTAR LOS PATRONES
             for I in range(len(self.MATRIZ_ENTRADA)):
-                
-                print("PATRON: ", I+1)
-                print()
+
                 PATRON_PRESENTADO = (self.MATRIZ_ENTRADA[I,:])
-                print("PATRON PRESENTADO")
-                print(PATRON_PRESENTADO)
-
                 SALIDA_PATRON = np.array([self.MATRIZ_SALIDA[I]]) if self.MATRIZ_SALIDA.ndim==1 else (self.MATRIZ_SALIDA[I,:])
-                print("SALIDA DEL PATRON")
-                print(SALIDA_PATRON)
-                print()
-
-                print("FUNCION SOMA")
-                print(self.FUNCION_SOMA(PATRON_PRESENTADO))
-                print()
-
-                print("FUNCION SALIDA")
-                print(self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO)))
-                print()
-
-                print("ERROR LINIAL")
-                print(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO))))
-                print()
-
-                print("ERRORES PATRONES")
-                print((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / self.MATRIZ_SALIDA.ndim)
-                print()
-
+                
                 ERROR_PATRON.append((np.abs(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO)))).sum()) / self.MATRIZ_SALIDA.ndim)
 
-                print("NUEVOS PESOS")
                 self.ACTUALIZAR_PESOS(PATRON_PRESENTADO, self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO))))
-                print(self.MATRIZ_PESOS)
-                print()
-
-                print("NUEVOS PESOS")
                 self.ACTUALIZAR_UMBRALES(self.FUNCION_ERROR_LINEAL(SALIDA_PATRON, self.FUNCION_SALIDAS(self.FUNCION_SOMA(PATRON_PRESENTADO))))
-                print(self.MATRIZ_UMBRALES)
-                print()
-                print("---------------------------")
-
-            print("---------------------------")
-            #METODO PARA OBTENER EL ERROR DEL PATRON
-            print("ERRORES PATRONES")
-            print(ERROR_PATRON)
-            print()
 
             #METODO PARA OBTENER EL ERROR DE LA ITERACION
-            print("ERROR DE LA ITERACION")
             ERROR_RMS = (np.sum(ERROR_PATRON)) / len(self.MATRIZ_ENTRADA)
-            print(ERROR_RMS)
-            print()
-
+            
+            plt.plot(ITERACION_INICIAL+1, ERROR_RMS, 'o', linewidth=3, color=(0.2,0.1,0.4))
+            
             ITERACION_INICIAL+=1
 
             #CONDICIONES DE PARADA
             if((ITERACION_INICIAL > self.NUMERO_ITERACIONES-1) or (ERROR_RMS <= self.ERROR_MAXIMO)):
                 break
         
+        plt.legend(('Error RMS'),
+prop = {'size': 20},)
+        plt.show()
+
         if(ERROR_RMS <= self.ERROR_MAXIMO):
             try:
                 os.mkdir('CONFIG/' + CARPETA)
             except OSError as e:
                 if e.errno != errno.EEXIST:
                     raise
+
+            try:
+                os.mkdir('CONFIG/' + CARPETA + "/" + self.NOMBRE_SALIDAS())
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
             
-            np.savetxt("CONFIG/" + CARPETA + "/" + ARC_PESOS, self.MATRIZ_PESOS)
-            np.savetxt("CONFIG/" + CARPETA + "/" + ARC_UMBRALES, self.MATRIZ_UMBRALES)
+            np.savetxt("CONFIG/" + CARPETA + "/" + self.NOMBRE_SALIDAS() + "/" + ARC_PESOS, self.MATRIZ_PESOS)
+            np.savetxt("CONFIG/" + CARPETA + "/" + self.NOMBRE_SALIDAS() + "/" + ARC_UMBRALES, self.MATRIZ_UMBRALES)
             
-            print("PESOS OPTIMOS: ")
-            print(self.MATRIZ_PESOS)
-            print()
-            print("UMBRALES OPTIMOS: ")
-            print(self.MATRIZ_UMBRALES)
-            print()
-        
+        print("ERROR RMS: ", ERROR_RMS)
+        print()
         print("NUMERO DE ITERACIONES REALIZADAS: ", ITERACION_INICIAL)
         print()
 
@@ -194,3 +163,12 @@ class Neurona:
     def FUNCION_LINEAL(self, SALIDA_SOMA):
         YR = SALIDA_SOMA
         return YR
+
+    #NOMBRE DE LA FUNCION SALIDA
+    def NOMBRE_SALIDAS(self):
+        switcher = {
+            1: 'ESCALON',
+            2: 'LINEAL',
+            3: 'SIGMOIDE'
+        }
+        return switcher.get(self.FUNCION_SALIDA, "ERROR")

@@ -1,20 +1,35 @@
 import numpy as np
+import random as rn
 
-X = np.array([[1,0,1], [0,1,1], [1,1,0]])               #MATRIZ ENTRADAS
+archivo_entrada = 'entradas'
 
-YD = np.array([[1,0], [0,1], [1,1]])                    #MATRIZ SALIDAS
+archivo_salida = 'salidas'
 
-PESOS = np.array([[0.1,-0.5,-0.9], [0.6,0.2,-0.3]])     #MATRIZ PESOS
+X =  np.loadtxt('Data/' + archivo_entrada)
 
-UMBRAL = np.array([0.5, -0.8])                          #MATRIZ UMBRAL
+YD = np.loadtxt('Data/' + archivo_salida)                 #MATRIZ SALIDAS
 
-M = 3       #ENTREDAS
-N = 2       #SALIDAS
-P = 3       #PATRONES
+PESOS = []
+
+UMBRAL = []    
+
+for n in range(YD.ndim):
+    fila = []
+    for M in range(len(X[0])):
+        fila.append(round(rn.uniform(-1, 1), 2))
+    PESOS.append(fila)
+
+for n in range(YD.ndim):
+    UMBRAL.append(round(rn.uniform(-1, 1), 2))
+
+
+M = len(X[0])       #ENTREDAS
+N = YD.ndim       #SALIDAS
+P = len(X)       #PATRONES
 
 RA = 1      #RATA DE APRENDIZAJE
 ER = 0.1    #ERROR LINEAL
-NI = 1000   #NUMERO DE ITERACIONES
+NI = 10   #NUMERO DE ITERACIONES
 
 IT = 0      #ITERACION INICIAL
 
@@ -43,8 +58,8 @@ while True:
         print()
 
         YDP = []         #PATRON PRESENTADO
-        for JP in range(N):
-            YDP.append(YD[IP][JP])
+        for YDa in YD:
+            YDP.append(YDa)
         print("SALIDA DEL PATRON")
         print(YDP)
         print()
