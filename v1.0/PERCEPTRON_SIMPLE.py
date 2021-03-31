@@ -23,6 +23,8 @@ ERROR_LINEAL = []
 
 ITERATE = 0 
 
+funcion = '0'
+
 for n in range(YD.ndim):
     fila = []
     for M in range(len(X[0])):
@@ -32,6 +34,14 @@ for n in range(YD.ndim):
 
 for n in range(YD.ndim):
     UMBRAL.append(round(rn.uniform(-1, 1), 2))
+
+def FuncionSoma(self, patron):
+    salida = []   
+    for i in range(self.salidas.ndim):
+        for j in range(len(patron)):
+            suma_funcion_soma = (patron[j] * self.pesos[i][j]) - self.umbral[i]
+            salida.append(suma_funcion_soma)
+    return salida
 
 while True:
 
@@ -49,11 +59,22 @@ while True:
         SALIDA = []
         print("YR",YR,"\n")
 
-        for ESCALON in YR:
-            if ESCALON >= 0:
-                SALIDA.append(1)
-            else:
-                SALIDA.append(0)
+        if funcion == '0':
+            SALIDA = []   
+            for i in range(YD.ndim):
+                for j in range(len(ENTRADA)):
+                    suma_funcion_soma = (ENTRADA[j] * PESOS[i][j]) - UMBRAL[i]
+                    SALIDA.append(suma_funcion_soma)
+
+        elif funcion == '1':
+            salida_soma = FuncionSoma(ENTRADA)
+            SALIDA = []
+            for n in range(len(salida_soma)):
+                SALIDA.append(1 / (1 + np.exp(-salida_soma[n])))
+
+        elif funcion == '2':
+            salida_soma = FuncionSoma(ENTRADA)
+            SALIDA = salida_soma
 
         ERROR_LINEAL = np.subtract(YD[CONTADOR], SALIDA)
 
@@ -79,5 +100,26 @@ if (ERROR_RMS <= ERROR):
         np.savetxt('Data/umbral',UMBRAL, delimiter =' ')
 else:
     print('Fail')
+
+    def FuncionSoma(self, patron):
+        
+        return salida
+
+    def FuncionEscalon(self, salida_resultante):
+        salida = []
+        for escalon in salida_resultante:
+            salida_resultante_new = 1 if escalon >= 0 else 0
+            salida.append(salida_resultante_new)
+        return salida
+
+    def FuncionSigmoide(self, salida_soma):
+        salida_resultante = []
+        for n in range(len(salida_soma)):
+            salida_resultante.append(1 / (1 + np.exp(-salida_soma[n])))
+        return salida_resultante
+
+    def FuncionLineal(self, salida_soma):
+        salida_resultante = salida_soma
+        return salida_resultante
 
 

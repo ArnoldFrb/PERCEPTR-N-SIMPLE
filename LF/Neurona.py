@@ -7,6 +7,7 @@ class Neurona:
         cfg = Config(entrada,salida)
         
         self.entradas = cfg.GetEntradas()
+        #self.num_patrones = 
         self.salidas = cfg.GetSalidas()
         self.pesos = cfg.GenerarPesos()
         self.umbral = cfg.GenerarUmbrales()
@@ -22,12 +23,30 @@ class Neurona:
             iterador += 1
         return salida_resultante
 
+    def FuncionSoma(self, patron):
+        salida = []   
+        for i in range(self.salidas.ndim):
+            for j in range(len(patron)):
+                suma_funcion_soma = (patron[j] * self.pesos[i][j]) - self.umbral[i]
+                salida.append(suma_funcion_soma)
+        return salida
+
     def FuncionEscalon(self, salida_resultante):
         salida = []
         for escalon in salida_resultante:
             salida_resultante_new = 1 if escalon >= 0 else 0
             salida.append(salida_resultante_new)
         return salida
+
+    def FuncionSigmoide(self, salida_soma):
+        salida_resultante = []
+        for n in range(len(salida_soma)):
+            salida_resultante.append(1 / (1 + np.exp(-salida_soma[n])))
+        return salida_resultante
+
+    def FuncionLineal(self, salida_soma):
+        salida_resultante = salida_soma
+        return salida_resultante
 
     def CalcularErrorLineal(self, salidas, salida, iterador):
         return np.subtract(salidas[iterador], salida)
@@ -42,12 +61,12 @@ class Neurona:
 
     def NuevoUmbral(self, umbral, rata, error_lineal):
         for j in range(len(umbral)) :
-            umbral[j] += rata*error_lineal[j]
+            umbral[j] += rata * error_lineal[j]
 
     def CalcularErrorRMS(self, error_patron):
         return np.abs(error_patron).sum()/len(error_patron)
 
-    def Entrenar(self):
+    def Entrenar(self,funcion):
 
         contador = 0
 
@@ -57,7 +76,18 @@ class Neurona:
 
             self.salida_resultante = self.CalcularSalidaResultante(entrada, self.pesos, self.umbral)
 
-            self.salida = self.FuncionEscalon(self.salida_resultante)
+            salida_patron = np.array([self.salidas[contador]]) if self.salidas.ndim==1 else (self.salida[contador,:])
+
+            if funcion == 'Funcion Escalon':
+                self.salida = self.FuncionEscalon(self.salida_resultante)
+
+            elif funcion == 'Funcion Lineal':
+                self.resultado_soma = self.FuncionSoma(entrada)
+                self.salida = self.FuncionLineal(self.resultado_soma)
+
+            elif funcion == 'Funcion Sigma':
+                self.resultado_soma = self.FuncionSoma(entrada)
+                self.salida = self.FuncionSigmoide(self.resultado_soma)
 
             self.error_lineal = self.CalcularErrorLineal(self.salidas, self.salida, contador)
 
