@@ -1,19 +1,19 @@
 import numpy as np
-from Config import *
-
+from Entrenamiento import *
 class Neurona:
-    def __init__(self,entrada, salida, rata_aprendizaje = 1, error = 0.1, numero_iteraciones = 10000):
+    def __init__(self,entrada, salida, rata_aprendizaje = 1, error = 0.1, numero_iteraciones = 1000):
         
-        cfg = Config(entrada,salida)
+        cfg = Entrenamiento(entrada,salida)
         
         self.entradas = cfg.GetEntradas()
-        #self.num_patrones = 
         self.salidas = cfg.GetSalidas()
         self.pesos = cfg.GenerarPesos()
         self.umbral = cfg.GenerarUmbrales()
         self.rata_aprendizaje = rata_aprendizaje
         self.error = error
         self.numero_iteraciones = numero_iteraciones
+        self.errores_RMS = []
+        self.num_iterate = 0
 
     def CalcularSalidaResultante(self, entrada, pesos, umbral):
         salida_resultante = []
@@ -72,6 +72,8 @@ class Neurona:
 
         self.error_patron = []
 
+        self.YR = []
+
         for entrada in self.entradas:
 
             self.salida_resultante = self.CalcularSalidaResultante(entrada, self.pesos, self.umbral)
@@ -89,6 +91,8 @@ class Neurona:
                 self.resultado_soma = self.FuncionSoma(entrada)
                 self.salida = self.FuncionSigmoide(self.resultado_soma)
 
+            self.YR.append(self.salida)
+
             self.error_lineal = self.CalcularErrorLineal(self.salidas, self.salida, contador)
 
             self.error_patron.append(self.CalcularErrorPatron(self.error_lineal))
@@ -98,6 +102,10 @@ class Neurona:
             self.NuevoUmbral(self.umbral, self.rata_aprendizaje, self.error_lineal)
 
             self.error_RMS = self.CalcularErrorRMS(self.error_patron)
+
+            self.errores_RMS.append(self.error_RMS)
+
+            self.num_iterate += 1
 
             contador += 1
 

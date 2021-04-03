@@ -28,12 +28,12 @@ class View:
             tv["show"] = "headings"
 
             for column in tv["columns"]:
-                tv.heading(column, text=column) # let the column heading = column name
+                tv.heading(column, text=column)
 
-            df_rows1 = df.to_numpy().tolist() # turns the dataframe into a list of lists
+            df_rows1 = df.to_numpy().tolist()
             for row in df_rows1:
                 tv.insert("", "end", values=row)
-        
+
         def crearGrid(tv,frame):
             tv.place(relheight=1, relwidth=1)
             treescrolly = Scrollbar(frame, orient="vertical", command=tv.yview)
@@ -44,19 +44,18 @@ class View:
 
         def graficar(frame,v1,v2):
             fig = Figure(figsize=(5, 4), dpi=100)
-            fig.add_subplot(111).plot(self.v1, self.v2)
+            fig.add_subplot(111).plot(v2,'o',v1,'*')
 
-            canvas = FigureCanvasTkAgg(master=frame)
+            canvas = FigureCanvasTkAgg(fig,master=frame)
             canvas.draw()
             canvas.get_tk_widget().place(relwidth=1,relheight=1)
 
         def Entrenar(funcion):
-            
 
             self.neurona = Neurona(self.fileEntrada, self.fileSalida)
 
             matriz = []
-
+            YD = []
             for i in range(len(self.neurona.entradas)):
                 fila = []
 
@@ -65,7 +64,6 @@ class View:
 
                 for j in range(self.neurona.salidas.ndim):
                     fila.append(self.neurona.salidas[i] if self.neurona.salidas.ndim==1 else (self.neurona.salidas[i,j]))
-
                 matriz.append(fila)
 
             col = []
@@ -92,7 +90,7 @@ class View:
             matriz = []
             for j in range(len(self.neurona.pesos)):
                 matriz.append(self.neurona.pesos[j])
-    
+
             df_peso = pd.DataFrame(matriz)
 
             llenarTabla(tv3,df_peso)
@@ -112,9 +110,9 @@ class View:
                     break
 
             if (self.neurona.error_RMS <= self.neurona.error):
-                np.savetxt('Data/pesos', self.neurona.pesos, delimiter =' ')
-                np.savetxt('Data/umbral', self.neurona.umbral, delimiter =' ')
-            
+                np.savetxt('LF/Data/pesos', self.neurona.pesos, delimiter =' ')
+                np.savetxt('LF/Data/umbral', self.neurona.umbral, delimiter =' ')
+
             #######################################################
             matriz = []
             for j in range(len(self.neurona.umbral)):
@@ -128,7 +126,7 @@ class View:
             matriz = []
             for j in range(len(self.neurona.pesos)):
                 matriz.append(self.neurona.pesos[j])
-    
+
             df_peso = pd.DataFrame(matriz)
 
             llenarTabla(tv4,df_peso)
@@ -136,15 +134,23 @@ class View:
             #######################################################
 
             lbl_error = Label(self.root, text='Error RMS:'+str(self.neurona.error_RMS))
+            lbl_error.place(relx=.05,rely=.9,relwidth=.10,relheight=.05)
 
-            #graficar(frame_grafica_simulacion)
+            lbl_error = Label(self.root, text='Numero iteraciones:'+str(iterador))
+            lbl_error.place(relx=.15,rely=.9,relwidth=.15,relheight=.05)
+
+            
+            num = np.arange(0, self.neurona.num_iterate,1)
+
+            graficar(frame_grafica_simulacion,self.neurona.salidas,self.neurona.YR)
+            #graficar(frame_grafica_error,num,self.neurona.errores_RMS)
             #graficar(frame_grafica_error)
 
-        
         self.root = Tk()
         self.root.title('Perceptron Simple')
+        #self.root.
         self.root.geometry("{0}x{1}+0+0".format(self.root.winfo_screenwidth(),self.root.winfo_screenheight()))
-        
+
         frame_input_output = Frame(self.root)
         frame_input_output.place(relx=.01,rely=.01,relwidth=.33,relheight=.11)
 
@@ -194,8 +200,7 @@ class View:
 
         ###################################################################
 
-
-        frame_view_new_umbral = LabelFrame(self.root, text="Nuevos Umbral")
+        frame_view_new_umbral = LabelFrame(self.root, text="Umbral final")
         frame_view_new_umbral.place(relx=.01,rely=.65,relwidth=.16,relheight=.16)
 
         tv5 = Treeview(frame_view_new_umbral)
@@ -203,7 +208,7 @@ class View:
 
         ###################################################################
 
-        frame_view_new_Peso = LabelFrame(self.root, text="Nuevos Pesos")
+        frame_view_new_Peso = LabelFrame(self.root, text="Pesos finales")
         frame_view_new_Peso.place(relx=.18,rely=.65,relwidth=.16,relheight=.16)
 
         tv4 = Treeview(frame_view_new_Peso)
@@ -212,13 +217,24 @@ class View:
         ###################################################################
 
         frame_grafica_simulacion = LabelFrame(self.root, text="Grafica YD vs YR")
-        frame_grafica_simulacion.place(relx=.36,rely=.01,relwidth=.60,relheight=.45)
+        frame_grafica_simulacion.place(relx=.36,rely=.01,relwidth=.60,relheight=.80)
 
         ###################################################################
 
-        frame_grafica_error = LabelFrame(self.root, text="Grafica del error")
-        frame_grafica_error.place(relx=.36,rely=.50,relwidth=.60,relheight=.45)
+        #frame_grafica_error = LabelFrame(self.root, text="")
+        #frame_grafica_error.place(relx=.36,rely=.50,relwidth=.60,relheight=.45)
 
+        #btnSelectUmbral = Button(frame_grafica_error, text="Cargar entrada", command=lambda:selectUmbral())
+        #btnSelectUmbral.grid(column=0, row=1)
+
+        #ety_umbral = Entry(frame_grafica_error, width=50)
+        #ety_umbral.grid(column=1, row=1)
+
+        #btnSelectPesos = Button(frame_grafica_error, text="Cargar salida", command=lambda:selectPesos())
+        #btnSelectPesos.grid(column=0, row=0)
+
+        #ety_pesos = Entry(frame_grafica_error, width=50)
+        #ety_pesos.grid(column=1, row=0)
 
         self.root.mainloop()
 

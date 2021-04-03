@@ -1,16 +1,19 @@
 import numpy as np
 import random as rn 
+import pandas as pd
 
-class Config:
-    def __init__(self, archivo_entrada = 'Data/entradas', archivo_salida = 'Data/salidas'):
-        self.matriz_entrada = np.loadtxt(archivo_entrada)
-        self.matriz_salida = np.loadtxt(archivo_salida)
+class Entrenamiento:
+    def __init__(self,data = 'Data/data'):
+        self.df_entrada = pd.read_cvg(data, delimiter='', sheet_name='entrada')
+        self.df_salida = pd.read_cvg(data, delimiter='', sheet_name='salida')
 
     def GetEntradas(self):
-        return self.matriz_entrada
+        matriz = self.df_entrada.to_numpy()
+        return matriz
 
     def GetSalidas(self):
-        return self.matriz_salida
+        matriz = self.df_salida.to_numpy()
+        return matriz
     
     def GenerarPesos(self):
         matriz = []
