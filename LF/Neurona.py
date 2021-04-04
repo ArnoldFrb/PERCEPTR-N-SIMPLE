@@ -1,14 +1,13 @@
 import numpy as np
-from Entrenamiento import *
+from Entrenador import *
 class Neurona:
-    def __init__(self,entrada, salida, rata_aprendizaje = 1, error = 0.1, numero_iteraciones = 1000):
-        
-        cfg = Entrenamiento(entrada,salida)
-        
-        self.entradas = cfg.GetEntradas()
-        self.salidas = cfg.GetSalidas()
-        self.pesos = cfg.GenerarPesos()
-        self.umbral = cfg.GenerarUmbrales()
+    def __init__(self, ruta_dataSet, rata_aprendizaje = 1, error = 0.1, numero_iteraciones = 1000):
+        self.entrenador = Entrenador(ruta_dataSet)
+        self.entradas = self.entrenador.GetEntradas()
+        self.salidas = self.entrenador.GetSalidas()
+        self.pesos = self.entrenador.GenerarPesos(self.salidas,self.entradas)
+        self.umbrales = self.entrenador.GenerarUmbrales(self.salidas)
+        self.ruta_dataSet = ruta_dataSet
         self.rata_aprendizaje = rata_aprendizaje
         self.error = error
         self.numero_iteraciones = numero_iteraciones
@@ -23,11 +22,11 @@ class Neurona:
             iterador += 1
         return salida_resultante
 
-    def FuncionSoma(self, patron):
+    def FuncionSoma(self, patron, salidas):
         salida = []   
-        for i in range(self.salidas.ndim):
+        for i in range(len(salidas)):
             for j in range(len(patron)):
-                suma_funcion_soma = (patron[j] * self.pesos[i][j]) - self.umbral[i]
+                suma_funcion_soma = (patron[j] * self.pesos[i][j]) - self.umbrales[i]
                 salida.append(suma_funcion_soma)
         return salida
 
@@ -68,38 +67,37 @@ class Neurona:
 
     def Entrenar(self,funcion):
 
-        contador = 0
-
         self.error_patron = []
-
         self.YR = []
+
+        contador = 0
 
         for entrada in self.entradas:
 
-            self.salida_resultante = self.CalcularSalidaResultante(entrada, self.pesos, self.umbral)
+            self.salida_resultante = self.CalcularSalidaResultante(entrada, self.pesos, self.umbrales)
 
-            salida_patron = np.array([self.salidas[contador]]) if self.salidas.ndim==1 else (self.salida[contador,:])
+            salida_patron = np.array([self.salidas[contador]]) if len(self.salidas) == 1 else (self.salidas[contador,:])
 
             if funcion == 'Funcion Escalon':
-                self.salida = self.FuncionEscalon(self.salida_resultante)
+                self.salida_funcion = self.FuncionEscalon(self.salida_resultante)
 
             elif funcion == 'Funcion Lineal':
                 self.resultado_soma = self.FuncionSoma(entrada)
-                self.salida = self.FuncionLineal(self.resultado_soma)
+                self.salida_funcion = self.FuncionLineal(self.resultado_soma)
 
             elif funcion == 'Funcion Sigma':
                 self.resultado_soma = self.FuncionSoma(entrada)
-                self.salida = self.FuncionSigmoide(self.resultado_soma)
+                self.salida_funcion = self.FuncionSigmoide(self.resultado_soma)
 
-            self.YR.append(self.salida)
+            self.YR.append(self.salida_funcion)
 
-            self.error_lineal = self.CalcularErrorLineal(self.salidas, self.salida, contador)
+            self.error_lineal = self.CalcularErrorLineal(self.salidas, self.salida_funcion, contador)
 
             self.error_patron.append(self.CalcularErrorPatron(self.error_lineal))
 
             self.NuevoPeso(entrada, self.pesos, self.rata_aprendizaje, self.error_lineal)
 
-            self.NuevoUmbral(self.umbral, self.rata_aprendizaje, self.error_lineal)
+            self.NuevoUmbral(self.umbrales, self.rata_aprendizaje, self.error_lineal)
 
             self.error_RMS = self.CalcularErrorRMS(self.error_patron)
 

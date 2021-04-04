@@ -4,18 +4,48 @@ from tkinter import filedialog
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
+
 import numpy as np
+
 import pandas as pd
+
 from Neurona import *
 
 class ViewControl:
 
-    def loadData(self,entry):
-        fileEntrada = filedialog.askopenfilename()
-        entry.insert(0, fileEntrada)
-        return fileEntrada
+    def reload(self,file_entrada,treeview_umbral,treeview_peso):
+        self.neurona = Neurona(file_entrada)
+        self.VireUmbrales(treeview_umbral)
+        self.ViewPesos(treeview_peso)
+
+    def LoadData(self,entry,treeview_input_output,treeview_umbral,treeview_peso):
+        file_entrada = filedialog.askopenfilename()
+        entry.insert(0, file_entrada)
+        
+        self.neurona = Neurona(file_entrada)
+        self.LlenarTabla(treeview_input_output,self.neurona.entrenador.dataSet)
+        self.VireUmbrales(treeview_umbral)
+        self.ViewPesos(treeview_peso)
+
+        return file_entrada
     
-    def llenarTabla(self,treeview,dataframe):
+    def ViewPesos(self,treeview):
+        matriz = []
+        for j in range(len(self.neurona.pesos)):
+            matriz.append(self.neurona.pesos[j])
+
+        df_peso = pd.DataFrame(matriz)
+        self.LlenarTabla(treeview,df_peso)
+    
+    def VireUmbrales(self,treevire):
+        matriz = []
+        for j in range(len(self.neurona.umbrales)):
+            matriz.append(self.neurona.umbrales[j])
+
+        df_umbral = pd.DataFrame(matriz)
+        self.LlenarTabla(treevire,df_umbral)
+    
+    def LlenarTabla(self,treeview,dataframe):
         treeview.delete(*treeview.get_children())
         treeview["column"] = list(dataframe.columns)
         treeview["show"] = "headings"
@@ -27,7 +57,7 @@ class ViewControl:
         for row in df_rows:
             treeview.insert("", "end", values=row)
 
-    def crearGrid(self,treeview,frame):
+    def CrearGrid(self,treeview,frame):
         treeview.place(relheight=1, relwidth=1)
         treescrolly = Scrollbar(frame, orient="vertical", command=treeview.yview)
         treescrollx = Scrollbar(frame, orient="horizontal", command=treeview.xview)
@@ -35,7 +65,7 @@ class ViewControl:
         treescrollx.pack(side="bottom", fill="x")
         treescrolly.pack(side="right", fill="y")
 
-    def graficarDouPoint(self,frame,data_1,data_2):
+    def GraficarDouPoint(self,frame,data_1,data_2):
         fig = Figure(figsize=(5, 4), dpi=100)
         fig.add_subplot(111).plot(data_1,'o',data_2,'*')
 
@@ -43,63 +73,22 @@ class ViewControl:
         canvas.draw()
         canvas.get_tk_widget().place(relwidth=1,relheight=1)
 
-    def Entrenar(self,funcion,neurona):
-
-        matriz = []
-        YD = []
-        for i in range(len(neurona.entradas)):
-            fila = []
-
-            for j in range(neurona.entradas.ndim):
-                fila.append(neurona.entradas[i,j])
-
-            for j in range(neurona.salidas.ndim):
-                fila.append(neurona.salidas[i] if neurona.salidas.ndim==1 else (neurona.salidas[i,j]))
-            matriz.append(fila)
-
-        col = []
-        for j in range(neurona.entradas.ndim):
-            col.append("X"+str(j))
-
-        for j in range(neurona.salidas.ndim):
-            col.append("YD"+str(j))
-
-        df_intput_output = pd.DataFrame(matriz, columns=col)
-
-        llenarTabla(tv1,df_intput_output)
-
-        #######################################################
-        matriz = []
-        for j in range(len(neurona.umbral)):
-            matriz.append(neurona.umbral[j])
-
-        df_umbral = pd.DataFrame(matriz)
-
-        llenarTabla(tv2,df_umbral)
-
-        #######################################################
-        matriz = []
-        for j in range(len(neurona.pesos)):
-            matriz.append(neurona.pesos[j])
-
-        df_peso = pd.DataFrame(matriz)
-
-        llenarTabla(tv3,df_peso)
-
-        #######################################################
-
+    def Entrenar(self,funcion,treeview_umbral,treeview_peso):
         iterador = 0
         while True:
 
             error_patron = []
             contador = 0
 
-            neurona.Entrenar(funcion)
+            self.neurona.Entrenar(funcion)
 
             iterador += 1
-            if ((iterador > neurona.numero_iteraciones - 1) or (neurona.error_RMS <= neurona.error)):
+            if ((iterador > self.neurona.numero_iteraciones - 1) or (self.neurona.error_RMS <= self.neurona.error)):
                 break
+        
+        self.VireUmbrales(treeview_umbral)
+        self.ViewPesos(treeview_peso)
 
-        if (neurona.error_RMS <= neurona.error):
-            np.savetxt('LF/Data/pesos', neurona.pesos, delimiter =' ')
-            np.savetxt('LF/Data/umbral', neurona.umbral, delimiter =' ')
+        if (self.neurona.error_RMS <= self.neurona.error):
+            np.savetxt('LF/Data/pesos', self.neurona.pesos, delimiter =' ')
+            np.savetxt('LF/Data/umbral', self.neurona.umbral, delimiter =' ')
